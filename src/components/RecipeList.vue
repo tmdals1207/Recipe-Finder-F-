@@ -12,7 +12,6 @@ export default {
   },
   methods: {
     async fetchRecipes() {
-<<<<<<< HEAD
   try {
     // 프록시를 통해 백엔드로 요청
     const url = '/api/recipes/all';
@@ -26,17 +25,6 @@ export default {
   }
 },
 
-=======
-      try {
-        // 프록시를 통해 백엔드로 요청
-        const response = await axios.get('http://localhost:8080/api/recipes/all');
-        this.recipes = response.data;
-        console.log("Recipes fetched successfully");
-      } catch (error) {
-        console.error('Error fetching recipes:', error);
-      }
-    },
->>>>>>> 95b8de14f39614b1102ca03a973e225311fcf210
   },
 };
 </script>
@@ -53,16 +41,8 @@ export default {
   </div>
 </template>
 
-<<<<<<< HEAD
-<style scoped>
-/* 스타일 설정 */
-</style>
-=======
-  
-
   
   <style scoped>
   /* 스타일 설정 */
   </style>
   
->>>>>>> 95b8de14f39614b1102ca03a973e225311fcf210
