@@ -1,18 +1,20 @@
 <template>
-  <v-app>
-    <v-main>
-      <router-view/>
-    </v-main>
-  </v-app>
+  <div id="app">
+    <Header />
+    <router-view /> <!-- 현재 활성화된 페이지 컴포넌트가 여기에 렌더링됨 -->
+  </div>
 </template>
 
 <script>
+import Header from '@/components/Header.vue';
 
 export default {
-  name: 'App',
-
-  data: () => ({
-    //
-  }),
-}
+  components: {
+    Header,
+  },
+};
 </script>
+
+<style>
+/* 전역 스타일 */
+</style>

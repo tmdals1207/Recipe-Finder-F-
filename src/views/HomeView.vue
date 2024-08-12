@@ -1,18 +1,16 @@
 <template>
-  <HelloWorld />
+  <div>
+    <h1>Welcome to the Recipe App</h1>
+    <RecipeList />
+  </div>
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import RecipeList from '@/components/RecipeList.vue';
 
-// Components
-import HelloWorld from '../components/HelloWorld.vue';
-
-export default defineComponent({
-  name: 'HomeView',
-
+export default {
   components: {
-    HelloWorld,
+    RecipeList,
   },
-});
+};
 </script>
