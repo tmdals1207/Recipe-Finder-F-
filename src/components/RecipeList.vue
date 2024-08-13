@@ -41,7 +41,7 @@ export default {
   </div>
 </template>
 
-  
+
   <style scoped>
   /* 스타일 설정 */
   </style>
