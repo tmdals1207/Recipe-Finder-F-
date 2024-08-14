@@ -54,11 +54,14 @@ export default {
   </div>
 </template>
 
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
   
 
 >>>>>>> Stashed changes
+=======
+>>>>>>> eb9771667b1fbc94dff8b2ccb337adfd83e65ef3
 
   <style scoped>
   /* 스타일 설정 */
