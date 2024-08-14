@@ -25,7 +25,8 @@ export default {
   }
 },
 
-  },
+},
+
 };
 </script>
 
@@ -40,7 +41,6 @@ export default {
     <p v-else>No recipes found.</p>
   </div>
 </template>
-
 
   <style scoped>
   /* 스타일 설정 */

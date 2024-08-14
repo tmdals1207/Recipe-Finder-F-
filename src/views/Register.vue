@@ -28,7 +28,7 @@
         if (this.password !== this.confirmPassword) {
           alert('Passwords do not match!');
           return;
-        }
+        } 
         try {
           await axios.post('http://localhost:8080/api/auth/register', {
             email: this.email,
