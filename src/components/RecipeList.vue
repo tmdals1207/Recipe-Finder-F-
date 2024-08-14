@@ -25,20 +25,8 @@ export default {
   }
 },
 
-  try {
-    // 프록시를 통해 백엔드로 요청
-    const url = '/api/recipes/all';
-    console.log('Requesting URL:', url);
-    const response = await axios.get(url);
-    this.recipes = response.data;
-    console.log("Recipes fetched successfully");
-    console.log('Recipes data:', this.recipes);
-  } catch (error) { 
-    console.error('Error fetching recipes:', error);
-  }
 },
 
-  },
 };
 </script>
 
@@ -53,15 +41,6 @@ export default {
     <p v-else>No recipes found.</p>
   </div>
 </template>
-
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
-  
-
->>>>>>> Stashed changes
-=======
->>>>>>> eb9771667b1fbc94dff8b2ccb337adfd83e65ef3
 
   <style scoped>
   /* 스타일 설정 */
