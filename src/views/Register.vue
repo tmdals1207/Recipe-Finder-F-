@@ -8,7 +8,8 @@
         <button type="submit">Register</button>
       </form>
       <button @click="registerWithOAuth('google')">Register with Google</button>
-      <button @click="registerWithOAuth('facebook')">Register with Facebook</button>
+      <button @click="registerWithOAuth('naver')">Register with Naver</button>
+      <button @click="registerWithOAuth('kakao')">Register with Kakao</button>
     </div>
   </template>
   
