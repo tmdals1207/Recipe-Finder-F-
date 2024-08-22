@@ -1,4 +1,5 @@
 import { createStore } from 'vuex';
+import axios from 'axios';
 
 export default createStore({
   state: {
@@ -20,13 +21,9 @@ export default createStore({
     },
   },
   actions: {
-    login({ commit }, authData) {
-      // 로그인 처리 및 토큰 설정
-      return axios.post('http://localhost:8080/api/auth/login', authData)
-        .then(response => {
-          commit('setToken', response.data.token);
-          commit('setUser', response.data.user);
-        });
+    setAuthData({ commit }, authData) {
+      commit('setToken', authData.token);
+      commit('setUser', authData.user);
     },
     logout({ commit }) {
       commit('clearAuthData');
@@ -38,6 +35,9 @@ export default createStore({
     },
     user(state) {
       return state.user;
+    },
+    token(state) {
+      return state.token;
     },
   },
 });
