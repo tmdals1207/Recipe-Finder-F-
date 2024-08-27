@@ -8,6 +8,7 @@ import MealPlanner from '@/components/MealPlanner.vue';
 import store from '@/store';  // Vuex 스토어를 임포트하여 인증 상태를 확인
 import OAuthCallbackComponent from '@/components/OAuthCallbackComponent.vue';
 
+
 // 라우트 구성
 const routes = [
   {
@@ -32,6 +33,7 @@ const routes = [
     component: OAuthCallbackComponent,
   },
   {
+
     path: '/recipeSearch',
     name: 'RecipeSearch',
     component: RecipeSearch,
