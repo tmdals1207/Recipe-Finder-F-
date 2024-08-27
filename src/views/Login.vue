@@ -24,29 +24,24 @@ export default {
       email: '',
       password: '',
       loginError: null,
-      loading: false, // 로딩 상태 추가
+      loading: false,
     };
   },
   methods: {
     ...mapActions(['setAuthData']),
     async onSubmit() {
-      this.loading = true; // 로딩 시작
+      this.loading = true;
       try {
         const response = await axios.post('http://localhost:8080/api/auth/login', {
           email: this.email,
           password: this.password,
-        });
-
-        console.log("API 응답:", response.data);
+        });console.log(token, user);
 
         if (response.data.user) {
-          // 로그인 액션을 호출하여 Vuex에 사용자와 토큰 저장
           this.setAuthData({
             token: response.data.token,
-            user: response.data.user
+            user: response.data.user,
           });
-
-          console.log("로그인 성공, 홈 페이지로 리다이렉트합니다.");
           this.$router.push('/');
         } else {
           console.error("사용자 정보가 없습니다.");
@@ -55,10 +50,11 @@ export default {
         console.error('Login failed:', error);
         this.loginError = '로그인 실패: 이메일 또는 비밀번호를 확인하세요.';
       } finally {
-        this.loading = false; // 로딩 종료
+        this.loading = false;
       }
     },
     loginWithOAuth(provider) {
+      console.log("OAuth 로그인 시작");
       window.location.href = `http://localhost:8080/oauth2/authorization/${provider}`;
     },
   },
