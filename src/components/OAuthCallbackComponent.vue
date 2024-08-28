@@ -27,23 +27,37 @@ export default {
         ...mapActions(['setAuthData']),
         async fetchOAuthUserInfo() {
             try {
-                const token = localStorage.getItem('token');  // 또는 다른 저장소에서 토큰을 가져옴
+                // 현재 URL에서 쿼리 파라미터로부터 토큰 추출
+                const urlParams = new URLSearchParams(window.location.search);
+                const token = urlParams.get('token');
 
+                if (token) {
+                    // 토큰을 로컬 스토리지에 저장
+                    localStorage.setItem('token', token);
 
-                const response = await axios.get('http://localhost:8080/oauth2/loginInfo', {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                console.log(response.user);
+                    // Vuex 스토어에 저장
+                    this.setAuthData({
+                        token: token,
+                        user: null, // 필요 시 사용자 정보 추가
+                    });
 
-                const { token: newToken, user } = response.data;
-                this.setAuthData({
-                    token: newToken,
-                    user: user,
-                });
+                    // 사용자 정보를 백엔드에서 가져올 경우
+                    const response = await axios.get('http://localhost:8080/oauth2/getUser', {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    });
 
-                this.$router.push('/');
+                    const { user } = response.data;
+                    this.setAuthData({
+                        token: token,
+                        user: user,
+                    });
+
+                    this.$router.push('/'); // 홈으로 리디렉션
+                } else {
+                    throw new Error('Token not found in URL');
+                }
             } catch (error) {
                 console.error('OAuth2 사용자 정보 가져오기 실패:', error);
                 this.loginError = 'OAuth2 로그인 실패: 사용자 정보를 가져오는 데 실패했습니다.';
@@ -51,7 +65,6 @@ export default {
                 this.loading = false;
             }
         }
-
     },
     mounted() {
         // 컴포넌트가 로드될 때 사용자 정보를 가져옴
