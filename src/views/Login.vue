@@ -35,7 +35,7 @@ export default {
         const response = await axios.post('http://localhost:8080/api/auth/login', {
           email: this.email,
           password: this.password,
-        });console.log(token, user);
+        });
 
         if (response.data.user) {
           this.setAuthData({
