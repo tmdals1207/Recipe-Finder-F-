@@ -20,16 +20,29 @@ export default {
   computed: {
     ...mapGetters(['user']),
     userDisplayName() {
-      // 사용자 객체가 있을 때 username을 우선적으로 확인
-      // username이 없으면 email을 표시
       return this.user ? (this.user.username || this.user.email) : null;
     }
   },
   methods: {
-    logout() {
+    async logout() {
       const token = this.$store.getters.token;
       console.log(token);
 
+      // OAuth 제공자가 Kakao인 경우 카카오 로그아웃 처리
+      if (this.user.provider === 'kakao') {
+        try {
+          await axios.post('https://kapi.kakao.com/v1/user/logout', {}, {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          });
+          console.log('Kakao logout successful');
+        } catch (error) {
+          console.error('Kakao logout failed:', error);
+        }
+      }
+
+      // 서버 로그아웃 처리
       axios.post('http://localhost:8080/api/auth/logout', {}, {
         headers: {
           Authorization: `Bearer ${token}`
@@ -47,6 +60,7 @@ export default {
   name: 'Header',
 };
 </script>
+
 
 <style scoped>
 header {
