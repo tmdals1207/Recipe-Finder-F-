@@ -8,7 +8,9 @@ export default createStore({
   },
   mutations: {
     setUser(state, user) {
+      console.log('User set in mutation:', user);
       state.user = user;
+      localStorage.setItem('user', JSON.stringify(user));
     },
     setToken(state, token) {
       state.token = token;
@@ -18,10 +20,12 @@ export default createStore({
       state.user = null;
       state.token = null;
       localStorage.removeItem('token');
+      localStorage.removeItem('user');
     },
   },
   actions: {
     setAuthData({ commit }, authData) {
+      console.log('AuthData received in action:', authData);
       commit('setToken', authData.token);
       commit('setUser', authData.user);
     },

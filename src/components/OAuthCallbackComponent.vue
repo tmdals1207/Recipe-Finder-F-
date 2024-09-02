@@ -21,7 +21,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(['isAuthenticated', 'token']),
+        ...mapGetters(['isAuthenticated', 'token', 'user']),
     },
     methods: {
         ...mapActions(['setAuthData']),
@@ -37,8 +37,7 @@ export default {
 
                     // Vuex 스토어에 저장
                     this.setAuthData({
-                        token: token,
-                        user: null, // 필요 시 사용자 정보 추가
+                        token: token
                     });
 
                     // 사용자 정보를 백엔드에서 가져올 경우
@@ -46,14 +45,18 @@ export default {
                         headers: {
                             Authorization: `Bearer ${token}`
                         }
-                    });
+                    }); console.log('Response from getUser API:', response);
 
-                    const { user } = response.data;
-                    this.setAuthData({
-                        token: token,
-                        user: user,
-                    });
-
+                    const user = response.data;
+                    if (user) {
+                        this.setAuthData({
+                            token: token,
+                            user: user, // user 객체를 Vuex에 저장
+                        });
+                        console.log('User set in Vuex:', user);  // Vuex에 저장된 user 데이터 확인
+                    } else {
+                        throw new Error('User data not found in response');
+                    }
                     this.$router.push('/'); // 홈으로 리디렉션
                 } else {
                     throw new Error('Token not found in URL');
