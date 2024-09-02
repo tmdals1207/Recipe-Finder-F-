@@ -16,6 +16,7 @@ const routes = [
     name: 'Home',
     component: RecipeList,
     // meta: { requiresAuth: true },  // 인증이 필요한 페이지로 설정
+
   },
   {
     path: '/login',
