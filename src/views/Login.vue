@@ -38,7 +38,6 @@ export default {
         });
 
         console.log("API 응답:", response.data);
-        });
 
         if (response.data.user) {
           // 로그인 액션을 호출하여 Vuex에 사용자와 토큰 저장
