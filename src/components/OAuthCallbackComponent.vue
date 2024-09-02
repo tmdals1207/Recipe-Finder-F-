@@ -21,29 +21,46 @@ export default {
         };
     },
     computed: {
-        ...mapGetters(['isAuthenticated', 'token']),
+        ...mapGetters(['isAuthenticated', 'token', 'user']),
     },
     methods: {
         ...mapActions(['setAuthData']),
         async fetchOAuthUserInfo() {
             try {
-                const token = localStorage.getItem('token');  // 또는 다른 저장소에서 토큰을 가져옴
+                // 현재 URL에서 쿼리 파라미터로부터 토큰 추출
+                const urlParams = new URLSearchParams(window.location.search);
+                const token = urlParams.get('token');
 
+                if (token) {
+                    // 토큰을 로컬 스토리지에 저장
+                    localStorage.setItem('token', token);
 
-                const response = await axios.get('http://localhost:8080/oauth2/loginInfo', {
-                    headers: {
-                        Authorization: `Bearer ${token}`
+                    // Vuex 스토어에 저장
+                    this.setAuthData({
+                        token: token
+                    });
+
+                    // 사용자 정보를 백엔드에서 가져올 경우
+                    const response = await axios.get('http://localhost:8080/oauth2/getUser', {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }); console.log('Response from getUser API:', response);
+
+                    const user = response.data;
+                    if (user) {
+                        this.setAuthData({
+                            token: token,
+                            user: user, // user 객체를 Vuex에 저장
+                        });
+                        console.log('User set in Vuex:', user);  // Vuex에 저장된 user 데이터 확인
+                    } else {
+                        throw new Error('User data not found in response');
                     }
-                });
-                console.log(response.user);
-
-                const { token: newToken, user } = response.data;
-                this.setAuthData({
-                    token: newToken,
-                    user: user,
-                });
-
-                this.$router.push('/');
+                    this.$router.push('/'); // 홈으로 리디렉션
+                } else {
+                    throw new Error('Token not found in URL');
+                }
             } catch (error) {
                 console.error('OAuth2 사용자 정보 가져오기 실패:', error);
                 this.loginError = 'OAuth2 로그인 실패: 사용자 정보를 가져오는 데 실패했습니다.';
@@ -59,3 +76,4 @@ export default {
     },
 };
 </script>
+
