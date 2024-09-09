@@ -34,6 +34,7 @@ export default {
           params: { query: this.query },
         });
         this.recipes = response.data;
+        console.log(this.recipes)
       } catch (error) {
         console.error('Error searching recipes:', error);
       }

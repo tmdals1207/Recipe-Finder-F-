@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import RecipeList from '@/components/RecipeList.vue';
 import Login from '@/views/Login.vue';
 import Register from '@/views/Register.vue';
+import RecipeForm from '@/components/RecipeForm.vue';
 import RecipeSearch from '@/components/RecipeSearch.vue';
 import NutritionInfo from '@/components/NutritionInfo.vue';
 import MealPlanner from '@/components/MealPlanner.vue';
@@ -34,7 +35,12 @@ const routes = [
     component: OAuthCallbackComponent,
   },
   {
-
+    path: '/recipeForm',
+    name: 'RecipeForm',
+    component: RecipeForm,
+    meta: { requiresAuth: true },  // 인증이 필요한 페이지로 설정
+  },
+  {
     path: '/recipeSearch',
     name: 'RecipeSearch',
     component: RecipeSearch,
