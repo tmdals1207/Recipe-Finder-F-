@@ -68,6 +68,7 @@ export default {
                 this.loading = false;
             }
         }
+
     },
     mounted() {
         // 컴포넌트가 로드될 때 사용자 정보를 가져옴
@@ -75,3 +76,4 @@ export default {
     },
 };
 </script>
+
