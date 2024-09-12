@@ -81,7 +81,7 @@
     },
     methods: {
       submitRecipe() {
-        axios.post('http://localhost:8080/api/recipes', this.recipe)
+        axios.post('http://localhost:8080/api/recipes/create', this.recipe)
           .then(response => {
             alert('레시피가 성공적으로 등록되었습니다!');
             this.$router.push('/recipes');

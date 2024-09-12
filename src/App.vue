@@ -14,29 +14,23 @@ export default {
     Header,
   },
   methods: {
-    ...mapActions(['setAuthData']),
-    initializeAuth() {
-      const token = localStorage.getItem('token');
-      const user = localStorage.getItem('user');
-
-      if (token && user) {
-        try {
-          const parsedUser = JSON.parse(user); // 유효한 JSON인지 확인
-          this.setAuthData({ token, user: parsedUser }); // Vuex 스토어에 저장
-        } catch (error) {
-          console.error('Failed to parse user data from localStorage:', error);
-          localStorage.removeItem('user'); // 유효하지 않은 경우 제거
-        }
-      } else {
-        console.log('No token or user data found in localStorage');
+    // 사용자 정보 및 토큰을 localStorage에서 삭제
+    clearLocalStorage() {
+      const userId = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).id : null;
+      
+      if (userId) {
+        localStorage.removeItem(`user_${userId}`); // 특정 user_id로 저장된 정보 삭제
+        localStorage.removeItem(`token_${userId}`); // 토큰 삭제
       }
+      localStorage.removeItem('user'); // 기본적으로 저장된 user 정보 삭제
+      localStorage.removeItem('token'); // 기본적으로 저장된 token 삭제
+
+      console.log('Local storage cleared on app initialization');
     },
   },
-
-
   created() {
-    // 앱 초기화 시, 로컬 스토리지에서 토큰 및 유저 정보를 로드
-    this.initializeAuth();
+    // 앱이 초기화될 때 localStorage 초기화
+    this.clearLocalStorage();
   },
 };
 </script>

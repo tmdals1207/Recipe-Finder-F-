@@ -40,13 +40,19 @@ export default {
         console.log("API 응답:", response.data);
 
         if (response.data.user) {
-          // 로그인 액션을 호출하여 Vuex에 사용자와 토큰 저장
+           // 사용자별로 토큰과 유저 데이터를 로컬스토리지에 저장
+          const id = response.data.user.id;
+          localStorage.setItem(`token_${id}`, response.data.token);
+          localStorage.setItem(`user_${id}`, JSON.stringify(response.data.user));
+
+          // Vuex에도 저장
           this.setAuthData({
             token: response.data.token,
-            user: response.data.user
+            user: response.data.user,
           });
 
           console.log("로그인 성공, 홈 페이지로 리다이렉트합니다.");
+          console.log("토큰~!" + response.data.token);
           this.$router.push('/');
         } else {
           console.error("사용자 정보가 없습니다.");
