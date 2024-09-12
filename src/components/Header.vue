@@ -24,39 +24,41 @@ export default {
     }
   },
   methods: {
-    async logout() {
-      const token = this.$store.getters.token;
-      console.log(token);
-
-      // OAuth 제공자가 Kakao인 경우 카카오 로그아웃 처리
-      if (this.user.provider === 'kakao') {
-        try {
-          await axios.post('https://kapi.kakao.com/v1/user/logout', {}, {
-            headers: {
-              Authorization: `Bearer ${token}`
-            }
-          });
-          console.log('Kakao logout successful');
-        } catch (error) {
-          console.error('Kakao logout failed:', error);
-        }
-      }
-
-      // 서버 로그아웃 처리
-      axios.post('http://localhost:8080/api/auth/logout', {}, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then(() => {
-        this.$store.dispatch('logout');
-        this.$router.push('/login');
-      })
-      .catch(error => {
-        console.error('Logout failed:', error);
-      });
+  async logout() {
+    if (!this.user || !this.user.id) {
+      console.error("User ID not found for logout");
+      return;
     }
-  },
+
+    const userId = this.user.id;
+    const token = localStorage.getItem(`token_${userId}`);
+    console.log(userId, token);
+
+    if (!token) {
+      console.error("Token not found in localStorage");
+      return;
+    }
+
+    console.log(`Logging out user ID: ${userId} with token: ${token}`);
+
+    // 서버 로그아웃 처리
+    axios.post('http://localhost:8080/api/auth/logout', {}, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then(() => {
+      // 로그아웃 후 Vuex 스토어에서 사용자 데이터 삭제
+      this.$store.commit('clearAuthData', userId); // Vuex commit 호출
+      this.$router.push('/login'); // 로그아웃 후 로그인 페이지로 리다이렉트
+    })
+    .catch(error => {
+      console.error('Logout failed:', error);
+    });
+  }
+}
+
+  ,
   name: 'Header',
 };
 </script>
