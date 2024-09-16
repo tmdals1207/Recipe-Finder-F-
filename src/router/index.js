@@ -38,7 +38,7 @@ const routes = [
     path: '/recipeForm',
     name: 'RecipeForm',
     component: RecipeForm,
-    meta: { requiresAuth: true },  // 인증이 필요한 페이지로 설정
+    //meta: { requiresAuth: true },  // 인증이 필요한 페이지로 설정
   },
   {
     path: '/recipeSearch',

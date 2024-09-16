@@ -1,5 +1,4 @@
 import { createStore } from 'vuex';
-import axios from 'axios';
 
 export default createStore({
   state: {
@@ -21,8 +20,19 @@ export default createStore({
       state.user = null;
       state.token = null;
       localStorage.removeItem(`token_${id}`);
-    localStorage.removeItem(`user_${id}`);
+      localStorage.removeItem(`user_${id}`);
     },
+    initializeAuth(state) {
+      const userId = Object.keys(localStorage).find(key => key.startsWith('user_'));
+      if (userId) {
+        const user = JSON.parse(localStorage.getItem(userId));
+        const token = localStorage.getItem(`token_${user.id}`);
+        if (user && token) {
+          state.user = user;
+          state.token = token;
+        }
+      }
+    }
   },
   actions: {
     setAuthData({ commit }, authData) {
@@ -39,6 +49,9 @@ export default createStore({
       // 로그아웃 후 리다이렉트 처리
       this.$router.push('/login');
     },
+    initializeAuth({ commit }) {
+      commit('initializeAuth'); // 로컬 스토리지에서 사용자 정보를 초기화
+    }
   },
   getters: {
     isAuthenticated(state) {

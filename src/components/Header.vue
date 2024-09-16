@@ -48,6 +48,7 @@ export default {
       }
     })
     .then(() => {
+      localStorage.clear(); // 모든 데이터 삭제
       // 로그아웃 후 Vuex 스토어에서 사용자 데이터 삭제
       this.$store.commit('clearAuthData', userId); // Vuex commit 호출
       this.$router.push('/login'); // 로그아웃 후 로그인 페이지로 리다이렉트
