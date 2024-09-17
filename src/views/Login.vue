@@ -30,40 +30,48 @@ export default {
   methods: {
     ...mapActions(['setAuthData']),
     async onSubmit() {
-      this.loading = true; // 로딩 시작
-      try {
-        const response = await axios.post('http://localhost:8080/api/auth/login', {
-          email: this.email,
-          password: this.password,
-        });
+  this.loading = true; // 로딩 시작
+  try {
+    const response = await axios.post('http://localhost:8080/api/auth/login', {
+      email: this.email,
+      password: this.password,
+    });
 
-        console.log("API 응답:", response.data);
+    console.log("API 응답:", response.data);
 
-        if (response.data.user) {
-           // 사용자별로 토큰과 유저 데이터를 로컬스토리지에 저장
-          const id = response.data.user.id;
-          localStorage.setItem(`token_${id}`, response.data.token);
-          localStorage.setItem(`user_${id}`, JSON.stringify(response.data.user));
+    if (response.data.user) {
+      const id = response.data.user.id;
 
-          // Vuex에도 저장
-          this.setAuthData({
-            token: response.data.token,
-            user: response.data.user,
-          });
-
-          console.log("로그인 성공, 홈 페이지로 리다이렉트합니다.");
-          console.log("토큰~!" + response.data.token);
-          this.$router.push('/');
-        } else {
-          console.error("사용자 정보가 없습니다.");
-        }
-      } catch (error) {
-        console.error('Login failed:', error);
-        this.loginError = '로그인 실패: 이메일 또는 비밀번호를 확인하세요.';
-      } finally {
-        this.loading = false; // 로딩 종료
+      // 이전 사용자 정보 삭제
+      const previousToken = localStorage.getItem(`token_${id}`);
+      if (previousToken) {
+        localStorage.removeItem(`token_${id}`);
+        localStorage.removeItem(`user_${id}`);
       }
-    },
+
+      // 새로운 사용자 정보 저장
+      localStorage.setItem(`token_${id}`, response.data.token);
+      localStorage.setItem(`user_${id}`, JSON.stringify(response.data.user));
+
+      // Vuex에도 저장
+      this.setAuthData({
+        token: response.data.token,
+        user: response.data.user,
+      });
+
+      console.log("로그인 성공, 홈 페이지로 리다이렉트합니다.");
+      this.$router.push('/');
+    } else {
+      console.error("사용자 정보가 없습니다.");
+    }
+  } catch (error) {
+    console.error('Login failed:', error);
+    this.loginError = '로그인 실패: 이메일 또는 비밀번호를 확인하세요.';
+  } finally {
+    this.loading = false; // 로딩 종료
+  }
+}
+,
     loginWithOAuth(provider) {
       window.location.href = `http://localhost:8080/oauth2/authorization/${provider}`;
     },

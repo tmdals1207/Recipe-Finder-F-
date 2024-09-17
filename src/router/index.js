@@ -7,7 +7,8 @@ import RecipeSearch from '@/components/RecipeSearch.vue';
 import NutritionInfo from '@/components/NutritionInfo.vue';
 import MealPlanner from '@/components/MealPlanner.vue';
 import store from '@/store';  // Vuex 스토어를 임포트하여 인증 상태를 확인
-import OAuthCallbackComponent from '@/components/OAuthCallbackComponent.vue';
+import OAuthCallback from '@/views/OAuthCallback.vue';
+import MyPage from '@/views/MyPage.vue';
 
 
 // 라우트 구성
@@ -30,15 +31,21 @@ const routes = [
     component: Register,
   },
   {
+    path: '/mypage',
+    name: 'MyPage',
+    component: MyPage,
+    meta: { requiresAuth: true },  // 인증이 필요한 페이지로 설정
+  },
+  {
     path: '/oauth2/callback',
     name: 'OAuthCallback',
-    component: OAuthCallbackComponent,
+    component: OAuthCallback,
   },
   {
     path: '/recipeForm',
     name: 'RecipeForm',
     component: RecipeForm,
-    meta: { requiresAuth: true },  // 인증이 필요한 페이지로 설정
+    //meta: { requiresAuth: true },  // 인증이 필요한 페이지로 설정
   },
   {
     path: '/recipeSearch',
