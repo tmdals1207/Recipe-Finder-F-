@@ -68,8 +68,9 @@ export default {
             Authorization: `Bearer ${token}`
           }
         });
-        localStorage.clear();
-        this.$store.commit('clearAuthData', userId);
+        localStorage.clear(); // 모든 데이터 삭제
+        // 로그아웃 후 Vuex 스토어에서 사용자 데이터 삭제
+        this.$store.commit('clearAuthData', userId); // Vuex commit 호출
         this.$router.push('/login');
       } catch (error) {
         console.error('Logout failed:', error);
