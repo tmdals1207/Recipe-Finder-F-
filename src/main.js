@@ -7,6 +7,7 @@ import { loadFonts } from './plugins/webfontloader'
 import 'vuetify/styles';
 import '@mdi/font/css/materialdesignicons.css';
 import axios from 'axios';
+import './assets/main.css'
 
 loadFonts()
 

@@ -1,19 +1,35 @@
 <template>
-  <header>
-    <h1>개발중..!</h1>
-    <nav>
-      <ul>
-        <li><router-link to="/">Home</router-link></li>
-        <li><a @click="goToMyPage">MyPage</a></li> <!-- 프로필 링크 클릭시 메서드 호출 -->
-        <li v-if="userDisplayName">Logged in as: {{ userDisplayName }}</li>
-        <li v-if="isAuthenticated">
-          <button @click="logout">Logout</button>
-        </li>
-        <li v-else>
-          <router-link to="/login">Login</router-link>
-        </li>
-      </ul>
-    </nav>
+  <header class="bg-gradient-to-r from-orange-100 to-yellow-100 shadow-md">
+    <div class="container mx-auto px-4 py-6">
+      <div class="flex justify-between items-center">
+        <router-link to="/" class="text-3xl font-bold text-orange-600 hover:text-orange-700 transition duration-300">
+          맛있는 레시피
+        </router-link>
+        <nav>
+          <ul class="flex space-x-6 items-center">
+            <li>
+              <router-link to="/" class="text-orange-600 hover:text-orange-800 transition duration-300">홈</router-link>
+            </li>
+            <li>
+              <a @click="goToMyPage" class="text-orange-600 hover:text-orange-800 transition duration-300 cursor-pointer">마이페이지</a>
+            </li>
+            <li v-if="userDisplayName" class="text-gray-600">
+              {{ userDisplayName }}님 환영합니다!
+            </li>
+            <li v-if="isAuthenticated">
+              <button @click="logout" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                로그아웃
+              </button>
+            </li>
+            <li v-else>
+              <router-link to="/login" class="bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                로그인
+              </router-link>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
   </header>
 </template>
 
@@ -29,7 +45,6 @@ export default {
     }
   },
   methods: {
-    // 로그아웃 처리
     async logout() {
       if (!this.user || !this.user.id) {
         console.error("User ID not found for logout");
@@ -47,30 +62,25 @@ export default {
 
       console.log(`Logging out user ID: ${userId} with token: ${token}`);
 
-      // 서버 로그아웃 처리
-      axios.post('http://localhost:8080/api/auth/logout', {}, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      })
-      .then(() => {
+      try {
+        await axios.post('http://localhost:8080/api/auth/logout', {}, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
         localStorage.clear(); // 모든 데이터 삭제
         // 로그아웃 후 Vuex 스토어에서 사용자 데이터 삭제
         this.$store.commit('clearAuthData', userId); // Vuex commit 호출
-        this.$router.push('/login'); // 로그아웃 후 로그인 페이지로 리다이렉트
-      })
-      .catch(error => {
+        this.$router.push('/login');
+      } catch (error) {
         console.error('Logout failed:', error);
-      });
+      }
     },
     
-    // 프로필로 이동
     goToMyPage() {
       if (this.isAuthenticated) {
-        // 로그인된 경우 프로필 페이지로 이동
         this.$router.push('/mypage');
       } else {
-        // 로그인되지 않은 경우 로그인 페이지로 이동
         this.$router.push('/login');
       }
     }
@@ -78,10 +88,3 @@ export default {
   name: 'Header',
 };
 </script>
-
-<style scoped>
-header {
-  background-color: #f8f9fa;
-  padding: 10px;
-}
-</style>
