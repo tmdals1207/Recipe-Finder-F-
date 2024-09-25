@@ -148,16 +148,16 @@ export default {
           console.error("사용자 정보가 없습니다.");
         }
       } catch (error) {
-    console.error('Login failed:', error);
-    this.loginError = '로그인 실패: 이메일 또는 비밀번호를 확인하세요.';
-  } finally {
-    this.loading = false;
-  }
-}
-,
-loginWithOAuth(provider) {
-  window.location.href = `http://localhost:8080/oauth2/authorization/${provider}`;
-},
+        console.error('Login failed:', error);
+        this.loginError = '로그인 실패: 이메일 또는 비밀번호를 확인하세요.';
+      } finally {
+        this.loading = false;
+      }
+    }
+    ,
+    loginWithOAuth(provider) {
+      window.location.href = `http://localhost:8080/oauth2/authorization/${provider}`;
+    },
   },
 };
 </script>
