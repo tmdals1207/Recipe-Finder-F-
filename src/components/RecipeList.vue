@@ -11,6 +11,7 @@
           v-for="recipe in recipes"
           :key="recipe.id"
           class="recipe-card flex-shrink-0 w-72 bg-white rounded-lg shadow-md overflow-hidden snap-start"
+          @click="goToRecipeDetail(recipe.id)"
         >
           <img :src="recipe.image || '/placeholder.svg?height=150&width=288'" :alt="recipe.title" class="w-full h-40 object-cover" />
           <div class="p-4">
@@ -66,11 +67,14 @@ export default {
         }
       });
     },
-    handleScroll(event) {
+    handleScroll(event) { 
       const container = event.target;
       const scrollLeft = container.scrollLeft;
       const scrollWidth = container.scrollWidth - container.clientWidth;
       this.scrollProgress = (scrollLeft / scrollWidth) * 100;
+    },
+    goToRecipeDetail(recipeId) {
+      this.$router.push({ name: 'RecipeDetail', params: { id: recipeId } }); // 레시피 ID를 포함하여 라우팅
     }
   },
   directives: {
