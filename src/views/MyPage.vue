@@ -215,6 +215,24 @@ export default {
         return;
       }
 
+      // 사용자가 현재 자신의 정보와 동일한 값으로 변경하려 할 경우
+    if (user[field] === value) {
+      switch (field) {
+        case 'username':
+          alert("현재 사용중인 이름/별명 입니다.");
+          break;
+        case 'email':
+          alert("현재 사용중인 이메일 입니다.");
+          break;
+        case 'phone':
+          alert("현재 사용중인 전화번호 입니다.");
+          break;
+        default:
+          return; // 비밀번호는 제외
+      }
+      return;
+    }
+
       let endpoint;
 
       // 필드에 따라 적절한 엔드포인트 설정
@@ -252,17 +270,22 @@ export default {
         });
 
         if (response.ok) {
-          alert(`${field}가 성공적으로 변경되었습니다.`);
-          localStorage.setItem(`user_${userId}`, JSON.stringify({ ...user, [field]: value }));
+        alert(`${field}가 성공적으로 변경되었습니다.`);
+        localStorage.setItem(`user_${userId}`, JSON.stringify({ ...user, [field]: value }));
+      } else {
+        const errorMessage = await response.text();
+        // 서버에서 온 에러 메시지를 기반으로 사용자에게 알림
+        if (errorMessage.includes("이미")) {
+          alert(`${field === 'username' ? '이름/별명' : field}이(가) 이미 사용 중입니다.`);
         } else {
-          const errorMessage = await response.text();
           alert(`${field} 변경 실패: ${errorMessage}`);
         }
-      } catch (error) {
-        console.error("에러 발생:", error);
-        alert(`${field} 변경 중 에러가 발생했습니다.`);
       }
-    },
+    } catch (error) {
+      console.error("에러 발생:", error);
+      alert(`${field} 변경 중 에러가 발생했습니다.`);
+    }
+  },
     async saveName() {
       await this.saveField('username', this.name);
     },
@@ -322,7 +345,7 @@ export default {
         alert("로그인이 필요합니다.");
         return;
       }
-
+      
       const otherSettings = {
         id: user.id,
         address: this.address,

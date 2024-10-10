@@ -1,10 +1,15 @@
 <template>
   <header class="bg-gradient-to-r from-orange-100 to-yellow-100 shadow-md">
     <div class="container mx-auto px-4 py-6">
-      <div class="flex justify-between items-center">
+      <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
         <router-link to="/" class="text-3xl font-bold text-orange-600 hover:text-orange-700 transition duration-300">
           맛있는 레시피
         </router-link>
+        
+        <div class="w-full md:w-1/3 mx-4">
+          <RecipeSearch />
+        </div>
+        
         <nav>
           <ul class="flex space-x-6 items-center">
             <li>
@@ -35,9 +40,13 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import RecipeSearch from './RecipeSearch.vue';
 import axios from 'axios';
 
 export default {
+  components: {
+    RecipeSearch,
+  },
   computed: {
     ...mapGetters(['user', 'isAuthenticated']),
     userDisplayName() {

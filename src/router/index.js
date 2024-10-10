@@ -4,6 +4,7 @@ import Login from '@/views/Login.vue';
 import Register from '@/views/Register.vue';
 import RecipeForm from '@/components/RecipeForm.vue';
 import RecipeSearch from '@/components/RecipeSearch.vue';
+import RecipeDetail from '@/components/RecipeDetail.vue';
 import NutritionInfo from '@/components/NutritionInfo.vue';
 import MealPlanner from '@/components/MealPlanner.vue';
 import store from '@/store';  // Vuex 스토어를 임포트하여 인증 상태를 확인
@@ -52,6 +53,12 @@ const routes = [
     name: 'RecipeSearch',
     component: RecipeSearch,
     meta: { requiresAuth: true },  // 인증이 필요한 페이지로 설정
+  },
+  {
+    path: '/recipe/:id',  // id를 기반으로 라우팅
+    name: 'RecipeDetail',
+    component: RecipeDetail,
+    props: true,
   },
   {
     path: '/nutrition',
