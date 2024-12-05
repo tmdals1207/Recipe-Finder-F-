@@ -4,6 +4,7 @@ export default createStore({
   state: {
     user: null,
     token: null,
+    recipeUrl: null,
   },
   mutations: {
     setUser(state, user) {
@@ -32,7 +33,10 @@ export default createStore({
           state.token = token;
         }
       }
-    }
+    },
+    setRecipeUrl(state, url) {
+      state.recipeUrl = url;
+    },
   },
   actions: {
     setAuthData({ commit }, authData) {
@@ -51,7 +55,10 @@ export default createStore({
     },
     initializeAuth({ commit }) {
       commit('initializeAuth'); // 로컬 스토리지에서 사용자 정보를 초기화
-    }
+    },
+    setRecipeUrl({ commit }, url) {
+      commit('setRecipeUrl', url);
+    },
   },
   getters: {
     isAuthenticated(state) {
@@ -63,5 +70,6 @@ export default createStore({
     token(state) {
       return state.token;
     },
+    recipeUrl: (state) => state.recipeUrl,
   },
 });
