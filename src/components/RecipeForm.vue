@@ -51,51 +51,56 @@
         </div>
       </div>
 
-      <!-- 재료 및 양념 -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">재료</label>
-          <div class="flex">
-            <input type="text" v-model="newIngredient" @keyup.enter="addIngredient" placeholder="재료 입력 후 Enter"
-                   class="flex-grow px-3 py-2 border border-gray-300 rounded-l-md shadow-sm focus:ring-orange-500 focus:border-orange-500" />
-            <button type="button" @click="addIngredient"
-                    class="px-4 py-2 bg-orange-500 text-white rounded-r-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
-              추가
-            </button>
-          </div>
-          <ul class="mt-2 space-y-1">
-            <li v-for="(ingredient, index) in recipe.ingredients" :key="index"
-                class="flex justify-between items-center bg-orange-100 px-3 py-2 rounded-md">
-              <span>{{ ingredient }}</span>
-              <button type="button" @click="removeIngredient(index)"
-                      class="text-red-600 hover:text-red-800 focus:outline-none">
-                삭제
-              </button>
-            </li>
-          </ul>
+      <!-- 재료 -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">재료</label>
+        <div class="flex space-x-2">
+          <input type="text" v-model="newIngredient.name" placeholder="재료 이름"
+                class="flex-grow px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500" />
+          <input type="text" v-model="newIngredient.quantity" placeholder="양 (예: 200g)"
+                class="flex-grow px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500" />
+          <button type="button" @click="addIngredient"
+                  class="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none">
+            추가
+          </button>
         </div>
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1">양념</label>
-          <div class="flex">
-            <input type="text" v-model="newSeasoning" @keyup.enter="addSeasoning" placeholder="양념 입력 후 Enter"
-                   class="flex-grow px-3 py-2 border border-gray-300 rounded-l-md shadow-sm focus:ring-orange-500 focus:border-orange-500" />
-            <button type="button" @click="addSeasoning"
-                    class="px-4 py-2 bg-orange-500 text-white rounded-r-md hover:bg-orange-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2">
-              추가
+        <ul class="mt-2 space-y-1">
+          <li v-for="(ingredient, index) in recipe.ingredients" :key="index"
+              class="flex justify-between items-center bg-orange-100 px-3 py-2 rounded-md">
+            <span>{{ ingredient.name }} - {{ ingredient.quantity }}</span>
+            <button type="button" @click="removeIngredient(index)"
+                    class="text-red-600 hover:text-red-800 focus:outline-none">
+              삭제
             </button>
-          </div>
-          <ul class="mt-2 space-y-1">
-            <li v-for="(seasoning, index) in recipe.seasonings" :key="index"
-                class="flex justify-between items-center bg-orange-100 px-3 py-2 rounded-md">
-              <span>{{ seasoning }}</span>
-              <button type="button" @click="removeSeasoning(index)"
-                      class="text-red-600 hover:text-red-800 focus:outline-none">
-                삭제
-              </button>
-            </li>
-          </ul>
-        </div>
+          </li>
+        </ul>
       </div>
+
+      <!-- 양념 -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">양념</label>
+        <div class="flex space-x-2">
+          <input type="text" v-model="newSeasoning.name" placeholder="양념 이름"
+                class="flex-grow px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500" />
+          <input type="text" v-model="newSeasoning.quantity" placeholder="양 (예: 2스푼)"
+                class="flex-grow px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-orange-500 focus:border-orange-500" />
+          <button type="button" @click="addSeasoning"
+                  class="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 focus:outline-none">
+            추가
+          </button>
+        </div>
+        <ul class="mt-2 space-y-1">
+          <li v-for="(seasoning, index) in recipe.seasonings" :key="index"
+              class="flex justify-between items-center bg-orange-100 px-3 py-2 rounded-md">
+            <span>{{ seasoning.name }} - {{ seasoning.quantity }}</span>
+            <button type="button" @click="removeSeasoning(index)"
+                    class="text-red-600 hover:text-red-800 focus:outline-none">
+              삭제
+            </button>
+          </li>
+        </ul>
+      </div>
+
 
       <!-- 태그 -->
       <div>
@@ -177,14 +182,20 @@ export default {
         tags: [],
         cookingSteps: []
       },
-      newIngredient: '',
-      newSeasoning: '',
+      newIngredient: { name: '', quantity: '' },
+      newSeasoning: { name: '', quantity: '' },
       newTag: ''
     };
+  },
+  computed: {
+  token() {
+    return this.$store.getters.token;
+    }
   },
   methods: {
     submitRecipe() {
       const formData = new FormData();
+      const token = this.token
       formData.append('title', this.recipe.title);
       formData.append('summation', this.recipe.summation);
       if (this.recipe.profileImage) {
@@ -215,10 +226,15 @@ export default {
 
       axios.post('http://localhost:8080/api/recipes/create', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`
         }
-      })
+      })  
         .then(response => {
+          for (let pair of formData.entries()) {
+            console.log(pair[0] + ': ' + pair[1]); // key: value 출력
+        }
+          console.log(token)
           alert('레시피가 성공적으로 등록되었습니다!');
           this.$router.push('/');
         })
@@ -232,23 +248,29 @@ export default {
         });
     },
     addIngredient() {
-      if (this.newIngredient.trim()) {
-        this.recipe.ingredients.push(this.newIngredient.trim());
-        this.newIngredient = '';
-      }
-    },
-    removeIngredient(index) {
-      this.recipe.ingredients.splice(index, 1);
-    },
-    addSeasoning() {
-      if (this.newSeasoning.trim()) {
-        this.recipe.seasonings.push(this.newSeasoning.trim());
-        this.newSeasoning = '';
-      }
-    },
-    removeSeasoning(index) {
-      this.recipe.seasonings.splice(index, 1);
-    },
+    if (this.newIngredient.name.trim() && this.newIngredient.quantity.trim()) {
+      this.recipe.ingredients.push({ 
+        name: this.newIngredient.name.trim(), 
+        quantity: this.newIngredient.quantity.trim() 
+      });
+      this.newIngredient = { name: '', quantity: '' };
+    }
+  },
+  removeIngredient(index) {
+    this.recipe.ingredients.splice(index, 1);
+  },
+  addSeasoning() {
+    if (this.newSeasoning.name.trim() && this.newSeasoning.quantity.trim()) {
+      this.recipe.seasonings.push({
+        name: this.newSeasoning.name.trim(),
+        quantity: this.newSeasoning.quantity.trim()
+      });
+      this.newSeasoning = { name: '', quantity: '' };
+    }
+  },
+  removeSeasoning(index) {
+    this.recipe.seasonings.splice(index, 1);
+  },
     addTag() {
       if (this.newTag.trim()) {
         this.recipe.tags.push(this.newTag.trim());
