@@ -9,7 +9,7 @@
     "dev": "vite"
   },
   "dependencies": {
-    "@mdi/font": "5.9.55",
+    "@mdi/font": "5.9.55",  
     "axios": "^1.7.3",
     "caniuse-lite": "^1.0.30001706",
     "core-js": "^3.8.3",

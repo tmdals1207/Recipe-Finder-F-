@@ -36,6 +36,8 @@ export default {
     async fetchRecipe() {
       try {
         const response = await axios.get(`/api/recipes/${this.id}`);
+        console.log("Fetched Recipe Data:", response.data);
+        console.log(response.data.ingredients);
         this.recipe = response.data;
       } catch (error) {
         console.error('Error fetching recipe details:', error);
