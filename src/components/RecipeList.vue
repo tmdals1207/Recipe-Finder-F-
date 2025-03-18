@@ -2,8 +2,8 @@
   <div class="my-8">
     <h1 class="text-3xl font-bold text-orange-600 mb-6">레시피 목록</h1>
     <div v-if="recipes.length" class="relative">
-      <div ref="recipeList" class="recipe-list flex overflow-x-auto pb-4 space-x-4 snap-x snap-mandatory scrollbar-hide"
-        v-drag-scroll>
+      <div ref="recipeList" class="recipe-list flex overflow-x-auto pb-4 space-x-4 snap-x snap-mandatory" v-drag-scroll>
+
         <div v-for="recipe in recipes" :key="recipe.id"
           class="recipe-card flex-shrink-0 w-72 bg-white rounded-lg shadow-md overflow-hidden snap-start"
           @click="goToRecipeDetail(recipe.id)">
@@ -16,8 +16,8 @@
           </div>
         </div>
       </div>
-      <div class="scrollbar mt-2 h-1 bg-gray-200 rounded-full">
-        <div class="scrollbar-thumb h-full bg-orange-500 rounded-full" :style="{ width: scrollProgress + '%' }"></div>
+      <div class="scrollbar mt-2 h-1 bg-gray-300 rounded-full">
+        <div class="scrollbar-thumb h-full bg-orange-600 rounded-full" :style="{ width: scrollProgress + '%' }"></div>
       </div>
     </div>
     <p v-else class="text-gray-600">레시피를 찾을 수 없습니다.</p>
